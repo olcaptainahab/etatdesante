@@ -1,0 +1,144 @@
+/* Import de Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
+/* Variables globales */
+:root {
+    --bg-color: #ffffff;
+    --text-color: #000000;
+    --link-color: #007bff;
+    --hover-color: #00a8ff;
+    --nav-bg: #333;
+}
+
+/* Reset et styles de base */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    line-height: 1.6;
+}
+
+/* Styles de base pour le contenu */
+main {
+    padding: 0 2rem;
+}
+
+section {
+    margin-bottom: 2rem;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    margin-bottom: 1rem;
+    line-height: 1.3;
+}
+
+p {
+    margin-bottom: 1.2rem;
+    line-height: 1.8;
+}
+
+/* Navigation */
+header {
+    background-color: var(--nav-bg);
+    height: 60px;
+    padding: 0 2rem;
+}
+
+nav {
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 2rem;
+    height: 100%;
+    align-items: center;
+}
+
+.left-links {
+    margin-right: auto;
+}
+
+.right-links {
+    margin-left: auto;
+}
+
+/* Liens et effets de survol */
+nav ul li {
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+nav a, #theme-toggle {
+    color: white;
+    text-decoration: none;
+    padding: 0.8rem 1rem;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+nav a:hover, #theme-toggle:hover {
+    background-color: var(--hover-color);
+    color: white;
+}
+
+/* Bouton de thème */
+#theme-toggle {
+    background: none;
+    border: 1px solid white;
+    cursor: pointer;
+    font-family: 'Poppins', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 1rem;
+}
+
+#theme-toggle:hover {
+    border-color: var(--hover-color);
+}
+
+/* Thèmes */
+[data-theme="dark"] {
+    --bg-color: #1a1a1a;
+    --text-color: #ffffff;
+}
+
+[data-theme="light"] {
+    --bg-color: #ffffff;
+    --text-color: #1a1a1a;
+}
+
+/* Appliquer les couleurs de thème au body */
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+}
+
+/* Media Queries */
+@media (max-width: 768px) {
+    nav {
+        flex-direction: column;
+        padding: 1rem;
+    }
+    
+    nav ul {
+        flex-direction: column;
+        width: 100%;
+        text-align: center;
+    }
+    
+    .right-links {
+        margin-left: 0;
+    }
+
+    main {
+        padding: 0 1rem;
+    }
+}
