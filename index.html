@@ -95,6 +95,17 @@
         document.addEventListener('DOMContentLoaded', () => {
             const storedTheme = localStorage.getItem('theme') || 'dark';
             document.documentElement.setAttribute('data-theme', storedTheme);
+
+            // Envoyer les variables CSS à l'iframe de navigation
+            const navFrame = document.getElementById('nav-frame');
+            const computedStyle = getComputedStyle(document.documentElement);
+            const cssVars = {
+                headerHeight: computedStyle.getPropertyValue('--header-height').trim(),
+                navHeight: computedStyle.getPropertyValue('--nav-height').trim()
+            };
+            navFrame.addEventListener('load', () => {
+                navFrame.contentWindow.postMessage({ type: 'CSS_VARS', data: cssVars }, '*');
+            });
         });
 
         window.addEventListener('storage', (e) => {

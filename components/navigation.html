@@ -84,13 +84,13 @@
             /* Positionnement et apparence de base */
             display: none;
             position: fixed;
-            top: calc(var(--header-height) + 60px); /* On utilise la hauteur du header + nav */
+            top: 150px; /* Valeur temporaire qui sera mise à jour via JavaScript */
             left: 0;
             right: 0;
             background-color: #102338;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            max-height: calc(100vh - var(--header-height) - 60px); /* Limite la hauteur */
-            overflow-y: auto; /* Permet le défilement si nécessaire */
+            max-height: calc(100vh - 150px); /* Aussi mise à jour via JavaScript */
+            overflow-y: auto;
             z-index: 1000;
             border: 2px solid red;
 
@@ -191,6 +191,15 @@
     </nav>
 
     <script>
+        window.addEventListener('message', (event) => {
+            if (event.data.type === 'CSS_VARS') {
+                const menu = document.querySelector('.menu-content');
+                const totalTop = parseInt(event.data.data.headerHeight) + parseInt(event.data.data.navHeight);
+                menu.style.top = `${totalTop}px`;
+                menu.style.maxHeight = `calc(100vh - ${totalTop}px)`;
+            }
+        });
+        
         document.addEventListener('DOMContentLoaded', () => {
             const menuButton = document.querySelector('.menu-button');
             const menu = document.getElementById('mobile-menu');
