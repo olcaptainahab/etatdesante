@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Menu, X } from 'lucide-react';
 
 const MobileNavigation = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -17,11 +16,20 @@ const MobileNavigation = () => {
           className="p-2 text-white hover:bg-blue-600 rounded-md transition-colors duration-200"
           aria-label="Toggle menu"
         >
-          {isOpen ? (
-            <X className="w-6 h-6" />
-          ) : (
-            <Menu className="w-6 h-6" />
-          )}
+          {/* Icône de menu en HTML/CSS pur */}
+          <div className="w-6 h-6 relative flex items-center justify-center">
+            {isOpen ? (
+              <span className="absolute inset-0 flex items-center justify-center text-2xl font-bold">
+                ×
+              </span>
+            ) : (
+              <div className="space-y-1.5">
+                <span className="block w-6 h-0.5 bg-white"></span>
+                <span className="block w-6 h-0.5 bg-white"></span>
+                <span className="block w-6 h-0.5 bg-white"></span>
+              </div>
+            )}
+          </div>
         </button>
       </div>
 
