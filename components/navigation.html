@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
-        /* Styles de base restent les mêmes */
         * {
             margin: 0;
             padding: 0;
@@ -14,112 +13,63 @@
 
         body {
             font-family: 'Poppins', sans-serif;
-            overflow-x: hidden;
         }
 
         nav {
             background-color: #2c3b5c;
-            height: 60px;
-            position: relative;
+            padding: 10px;
         }
 
-        /* Styles desktop inchangés */
+        /* Desktop Nav */
         .desktop-nav {
             display: none;
-            height: 100%;
-            padding: 0 2rem;
         }
 
-        .desktop-nav a {
-            color: #50c9b7;
-            text-decoration: none;
-            padding: 0.8rem 1rem;
-            font-weight: bold;
-            transition: all 0.3s ease;
-        }
-
-        .desktop-nav a:hover {
-            color: white;
-            background-color: #4c566b;
-            border-radius: 4px;
-        }
-
-        /* Styles du menu mobile modifiés */
+        /* Mobile Nav */
         .mobile-nav {
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-            height: 100%;
-            padding: 0 1rem;
+            position: relative;
+            text-align: right;
         }
 
         .menu-button {
-            position: relative;
-            z-index: 2001;
-            padding: 10px;
             background: none;
             border: none;
             color: white;
             font-size: 24px;
+            padding: 10px;
             cursor: pointer;
-            transition: transform 0.3s ease;
         }
 
-        .menu-button:hover {
-            transform: scale(1.1);
-        }
-
-        /* Styles du menu mobile modifiés pour l'animation */
         .menu-content {
-            position: fixed;
-            top: 150px; /* Hauteur du header + nav */
-            left: 0;
-            right: 0;
+            display: none;
+            width: 100%;
             background-color: #102338;
-            padding: 0;
-            max-height: 0;
-            overflow: hidden;
-            opacity: 0;
-            transition: all 0.3s ease-in-out;
-            z-index: 2000;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-top: 10px;
         }
 
         .menu-content.active {
-            max-height: 300px; /* Hauteur maximale du menu */
-            opacity: 1;
-            padding: 10px 0;
-        }
-
-        .menu-content a {
-            color: white;
-            text-decoration: none;
-            padding: 15px 20px;
             display: block;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            transition: background-color 0.3s ease;
         }
 
-        .menu-content a:hover {
-            background-color: rgba(255, 255, 255, 0.1);
-        }
-
-        .lang-toggle {
-            color: #50c9b7;
-            background: none;
-            border: none;
-            padding: 0.8rem 1rem;
-            cursor: pointer;
-            font-weight: bold;
+        .menu-content a,
+        .menu-content button {
+            display: block;
             width: 100%;
+            padding: 15px;
             text-align: left;
+            border: none;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            background: none;
+            color: white;
+            font-size: 16px;
             font-family: 'Poppins', sans-serif;
-            transition: background-color 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
         }
 
-        .lang-toggle:hover {
+        .menu-content a:hover,
+        .menu-content button:hover {
             background-color: rgba(255, 255, 255, 0.1);
-            color: white;
         }
 
         @media (min-width: 1024px) {
@@ -133,17 +83,24 @@
                 align-items: center;
             }
 
-            .desktop-nav > div {
-                display: flex;
-                align-items: center;
-                gap: 1rem;
+            .desktop-nav a {
+                color: #50c9b7;
+                text-decoration: none;
+                padding: 10px;
+                margin: 0 5px;
+            }
+
+            .desktop-nav a:hover {
+                color: white;
+                background-color: rgba(255, 255, 255, 0.1);
+                border-radius: 4px;
             }
         }
     </style>
 </head>
 <body>
     <nav>
-        <!-- Navigation desktop -->
+        <!-- Desktop Navigation -->
         <div class="desktop-nav">
             <div>
                 <a href="../pages/home.html" target="content-frame">Page d'accueil</a>
@@ -156,15 +113,15 @@
             </div>
         </div>
 
-        <!-- Navigation mobile -->
+        <!-- Mobile Navigation -->
         <div class="mobile-nav">
             <button class="menu-button" onclick="toggleMenu()">☰</button>
-            <div class="menu-content" id="mobile-menu">
+            <div id="mobile-menu" class="menu-content">
                 <a href="../pages/home.html" target="content-frame">Page d'accueil</a>
                 <a href="../pages/temps-reel.html" target="content-frame">Temps réel</a>
                 <a href="../pages/articles.html" target="content-frame">Articles</a>
                 <a href="../pages/liens-utiles.html" target="content-frame">Liens utiles</a>
-                <button class="lang-toggle">FR / EN</button>
+                <button>FR / EN</button>
             </div>
         </div>
     </nav>
@@ -172,45 +129,42 @@
     <script>
         function toggleMenu() {
             const menu = document.getElementById('mobile-menu');
-            if (menu) {
-                menu.classList.toggle('active');
-                
-                // Log l'état pour le débogage
-                console.group('Toggle Menu');
-                console.log('Menu actif:', menu.classList.contains('active'));
-                console.log('Style calculé:', {
-                    maxHeight: window.getComputedStyle(menu).maxHeight,
-                    opacity: window.getComputedStyle(menu).opacity,
-                    padding: window.getComputedStyle(menu).padding
-                });
-                console.groupEnd();
-            }
+            menu.classList.toggle('active');
+            
+            // Debug logs
+            const styles = window.getComputedStyle(menu);
+            const menuRect = menu.getBoundingClientRect();
+            
+            console.log('Menu State:', {
+                isActive: menu.classList.contains('active'),
+                display: styles.display,
+                dimensions: {
+                    width: menuRect.width,
+                    height: menuRect.height,
+                    top: menuRect.top,
+                    left: menuRect.left
+                },
+                styles: {
+                    backgroundColor: styles.backgroundColor,
+                    visibility: styles.visibility,
+                    position: styles.position
+                }
+            });
         }
 
         document.addEventListener('DOMContentLoaded', () => {
             const menu = document.getElementById('mobile-menu');
-            const menuButton = document.querySelector('.menu-button');
-
-            if (menu && menuButton) {
-                // Fermer le menu lors du clic sur un lien
-                document.querySelectorAll('.menu-content a, .menu-content button').forEach(element => {
-                    element.addEventListener('click', () => {
-                        menu.classList.remove('active');
-                    });
-                });
-
-                // Fermer le menu lors du clic en dehors
-                document.addEventListener('click', (event) => {
-                    if (!menu.contains(event.target) && !menuButton.contains(event.target)) {
-                        menu.classList.remove('active');
-                    }
-                });
-
-                // Observer les transitions pour le débogage
-                menu.addEventListener('transitionend', (e) => {
-                    console.log('Transition terminée:', e.propertyName);
-                });
-            }
+            
+            // Log état initial du menu
+            const menuRect = menu.getBoundingClientRect();
+            console.log('Initial Menu State:', {
+                element: menu,
+                dimensions: {
+                    width: menuRect.width,
+                    height: menuRect.height
+                },
+                styles: window.getComputedStyle(menu)
+            });
         });
     </script>
 </body>
