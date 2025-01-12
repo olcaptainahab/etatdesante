@@ -6,7 +6,7 @@
 </head>
 <body>
     <header>
-        <nav>
+        <nav class="hidden lg:flex">
             <ul class="left-links">
                 <li><a href="/locales/fr/pages/home.html" target="content-frame">Page d'accueil</a></li>
             </ul>
@@ -16,7 +16,16 @@
                 <li><a href="/locales/fr/pages/liens-utiles.html" target="content-frame">Liens utiles</a></li>
             </ul>
         </nav>
+        <div id="mobile-nav"></div>
     </header>
     <script src="/assets/js/script.js"></script>
+    <script type="module">
+        import { createRoot } from 'react-dom/client';
+        import MobileNavigation from 'assets/js/components/navigation/MobileNavigation';
+        
+        const container = document.getElementById('mobile-nav');
+        const root = createRoot(container);
+        root.render(<MobileNavigation />);
+    </script>
 </body>
 </html>

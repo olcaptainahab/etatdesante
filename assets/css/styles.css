@@ -144,3 +144,43 @@ body {
         padding: 0 1rem;
     }
 }
+
+/* Styles pour appareils mobiles */
+@media (max-width: 768px) {
+    :root {
+        --header-height: 80px;
+    }
+    
+    main {
+        padding: 0 1rem;
+    }
+    
+    header {
+        height: auto;
+        padding: 0.5rem;
+    }
+    
+    nav.desktop-nav {
+        display: none;
+    }
+    
+    #content-frame {
+        margin-top: calc(var(--header-height) + 60px);
+        height: calc(100vh - (var(--header-height) + 60px));
+    }
+}
+
+/* Ajustements pour tablettes */
+@media (min-width: 769px) and (max-width: 1024px) {
+    :root {
+        --header-height: 100px;
+    }
+    
+    .site-title {
+        font-size: 3rem;
+    }
+    
+    main {
+        padding: 0 1.5rem;
+    }
+}
