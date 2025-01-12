@@ -22,12 +22,10 @@
             padding: 10px;
         }
 
-        /* Styles Desktop (masqués sur mobile) */
         .desktop-nav {
             display: none;
         }
 
-        /* Styles Mobile */
         .mobile-nav {
             text-align: right;
         }
@@ -41,18 +39,17 @@
             padding: 10px;
         }
 
-        /* Menu content avec indicateurs visuels pour le débogage */
         .menu-content {
-            background-color: red; /* Temporaire pour déboguer */
+            background-color: #102338;
             max-height: 0;
             overflow: hidden;
             transition: max-height 0.3s ease-out;
-            border: 2px solid yellow; /* Temporaire pour déboguer */
+            border: 2px solid yellow; /* Pour le débogage */
         }
 
         .menu-content.active {
-            max-height: 500px; /* Une valeur suffisamment grande */
-            border-color: green; /* Temporaire pour déboguer */
+            max-height: 500px;
+            border-color: green; /* Pour le débogage */
         }
 
         .menu-content a,
@@ -69,6 +66,11 @@
             font-size: 16px;
             cursor: pointer;
             text-decoration: none;
+        }
+
+        .menu-content a:hover,
+        .menu-content button:hover {
+            background-color: rgba(255, 255, 255, 0.1);
         }
 
         .debug-info {
@@ -95,23 +97,35 @@
                 justify-content: space-between;
                 align-items: center;
             }
+
+            .desktop-nav a {
+                color: #50c9b7;
+                text-decoration: none;
+                padding: 0.8rem 1rem;
+                font-weight: bold;
+            }
+
+            .desktop-nav a:hover {
+                color: white;
+                background-color: #4c566b;
+                border-radius: 4px;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Information de débogage en temps réel -->
     <div id="debug-info" class="debug-info"></div>
 
     <nav>
         <!-- Desktop Navigation -->
         <div class="desktop-nav">
             <div>
-                <a href="../pages/home.html" target="content-frame">Page d'accueil</a>
+                <a href="/locales/fr/pages/home.html" target="content-frame">Page d'accueil</a>
             </div>
             <div>
-                <a href="../pages/temps-reel.html" target="content-frame">Temps réel</a>
-                <a href="../pages/articles.html" target="content-frame">Articles</a>
-                <a href="../pages/liens-utiles.html" target="content-frame">Liens utiles</a>
+                <a href="/locales/fr/pages/temps-reel.html" target="content-frame">Temps réel</a>
+                <a href="/locales/fr/pages/articles.html" target="content-frame">Articles</a>
+                <a href="/locales/fr/pages/liens-utiles.html" target="content-frame">Liens utiles</a>
                 <button class="lang-toggle">FR / EN</button>
             </div>
         </div>
@@ -120,17 +134,16 @@
         <div class="mobile-nav">
             <button class="menu-button" onclick="toggleMenu()">☰</button>
             <div id="mobile-menu" class="menu-content">
-                <a href="../pages/home.html" target="content-frame">Page d'accueil</a>
-                <a href="../pages/temps-reel.html" target="content-frame">Temps réel</a>
-                <a href="../pages/articles.html" target="content-frame">Articles</a>
-                <a href="../pages/liens-utiles.html" target="content-frame">Liens utiles</a>
+                <a href="/locales/fr/pages/home.html" target="content-frame">Page d'accueil</a>
+                <a href="/locales/fr/pages/temps-reel.html" target="content-frame">Temps réel</a>
+                <a href="/locales/fr/pages/articles.html" target="content-frame">Articles</a>
+                <a href="/locales/fr/pages/liens-utiles.html" target="content-frame">Liens utiles</a>
                 <button>FR / EN</button>
             </div>
         </div>
     </nav>
 
     <script>
-        // Fonction pour mettre à jour les informations de débogage
         function updateDebugInfo(menu) {
             const debugEl = document.getElementById('debug-info');
             const styles = window.getComputedStyle(menu);
@@ -150,10 +163,12 @@
                     background: styles.backgroundColor,
                     position: styles.position,
                     visibility: styles.visibility,
-                    opacity: styles.opacity
+                    opacity: styles.opacity,
+                    zIndex: styles.zIndex
                 },
                 classes: menu.className,
-                children: menu.children.length
+                children: menu.children.length,
+                contentHeight: menu.scrollHeight + 'px'
             };
 
             debugEl.innerHTML = `<pre>${JSON.stringify(debugInfo, null, 2)}</pre>`;
@@ -161,59 +176,42 @@
         }
 
         function toggleMenu() {
-            console.log('Toggle Menu Called');
             const menu = document.getElementById('mobile-menu');
+            const isActive = menu.classList.contains('active');
             
-            // Log avant le changement
-            console.log('Before toggle:', {
+            console.log('Toggle Menu - Before:', {
+                isActive: isActive,
+                scrollHeight: menu.scrollHeight,
                 className: menu.className,
                 style: window.getComputedStyle(menu)
             });
-
-            // Toggle la classe
+            
             menu.classList.toggle('active');
             
-            // Force un reflow
-            void menu.offsetHeight;
-
-            // Log après le changement
-            console.log('After toggle:', {
+            console.log('Toggle Menu - After:', {
+                isActive: !isActive,
+                scrollHeight: menu.scrollHeight,
                 className: menu.className,
                 style: window.getComputedStyle(menu)
             });
-
-            // Mise à jour des infos de débogage
+            
             updateDebugInfo(menu);
-
-            // Observer les changements pendant la transition
-            const observer = new MutationObserver((mutations) => {
-                mutations.forEach((mutation) => {
-                    console.log('Mutation:', {
-                        type: mutation.type,
-                        target: mutation.target,
-                        style: window.getComputedStyle(mutation.target)
-                    });
-                });
-            });
-
-            observer.observe(menu, {
-                attributes: true,
-                attributeFilter: ['style', 'class']
-            });
         }
 
-        // Initialisation
         document.addEventListener('DOMContentLoaded', () => {
             const menu = document.getElementById('mobile-menu');
-            console.log('Initial state:', menu);
+            console.log('Initial menu state:', {
+                element: menu,
+                style: window.getComputedStyle(menu),
+                scrollHeight: menu.scrollHeight
+            });
             updateDebugInfo(menu);
 
-            // Observer les transitions
             menu.addEventListener('transitionend', (e) => {
                 console.log('Transition ended:', {
                     property: e.propertyName,
                     elapsedTime: e.elapsedTime,
-                    style: window.getComputedStyle(menu)
+                    currentHeight: menu.scrollHeight
                 });
                 updateDebugInfo(menu);
             });
