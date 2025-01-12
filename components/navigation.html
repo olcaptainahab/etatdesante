@@ -20,6 +20,7 @@
             background-color: #2c3b5c;
             height: 60px;
             width: 100%;
+            border: 2px solid green;
         }
 
         /* Styles des liens (communs) */
@@ -55,6 +56,7 @@
             display: flex;
             justify-content: flex-end;
             align-items: center;
+            border: 2px solid blue;
         }
 
         .menu-button {
@@ -74,6 +76,7 @@
             background-color: #102338;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             z-index: 1000;
+            border:2px solid red;
         }
 
         .menu-content.active {
@@ -180,14 +183,55 @@
         document.addEventListener('DOMContentLoaded', () => {
             const menuButton = document.querySelector('.menu-button');
             const menu = document.getElementById('mobile-menu');
-
+            const nav = document.querySelector('nav');
+        
+            // Fonction de débogage pour logger les infos des éléments
+            function logElementInfo(element, name) {
+                const rect = element.getBoundingClientRect();
+                const styles = window.getComputedStyle(element);
+                console.log(`=== ${name} Info ===`);
+                console.log('Position:', {
+                    top: rect.top,
+                    left: rect.left,
+                    bottom: rect.bottom,
+                    right: rect.right
+                });
+                console.log('Dimensions:', {
+                    width: rect.width,
+                    height: rect.height
+                });
+                console.log('CSS Properties:', {
+                    position: styles.position,
+                    display: styles.display,
+                    zIndex: styles.zIndex,
+                    transform: styles.transform,
+                    overflow: styles.overflow
+                });
+                console.log('Parent overflow:', window.getComputedStyle(element.parentElement).overflow);
+            }
+        
+            // Logger les infos initiales
+            logElementInfo(menu, 'Mobile Menu');
+            logElementInfo(nav, 'Navigation Bar');
+        
+            // Gestion du clic sur le menu (code existant modifié)
             menuButton.addEventListener('click', () => {
                 const isExpanded = menuButton.getAttribute('aria-expanded') === 'true';
                 menuButton.setAttribute('aria-expanded', !isExpanded);
                 menu.classList.toggle('active');
+                
+                // Ajout du logging lors du toggle
+                console.log('=== Menu Toggle ===');
+                requestAnimationFrame(() => {
+                    logElementInfo(menu, 'Mobile Menu After Toggle');
+                    console.log('Window scroll:', {
+                        scrollY: window.scrollY,
+                        innerHeight: window.innerHeight
+                    });
+                });
             });
-
-            // Fermer le menu quand on clique sur un lien ou en dehors
+        
+            // Code existant pour la fermeture du menu
             document.addEventListener('click', (event) => {
                 const isClickInside = menu.contains(event.target) || menuButton.contains(event.target);
                 if (!isClickInside && menu.classList.contains('active')) {
@@ -195,15 +239,24 @@
                     menuButton.setAttribute('aria-expanded', 'false');
                 }
             });
-
-            // Fermer le menu après avoir cliqué sur un lien
+        
+            // Code existant pour la fermeture après clic sur lien
             menu.querySelectorAll('a, button').forEach(element => {
                 element.addEventListener('click', () => {
                     menu.classList.remove('active');
                     menuButton.setAttribute('aria-expanded', 'false');
                 });
             });
+        
+            // Nouveau : surveillance du scroll
+            document.addEventListener('scroll', () => {
+                if (menu.classList.contains('active')) {
+                    console.log('=== Scroll Event ===');
+                    console.log('Window scroll position:', window.scrollY);
+                    console.log('Menu position:', menu.getBoundingClientRect().top);
+                }
+            });
         });
-    </script>
+        </script>
 </body>
 </html>
