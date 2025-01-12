@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
-        /* [Les styles CSS restent identiques à la version précédente] */
+        /* Styles de base restent les mêmes */
         * {
             margin: 0;
             padding: 0;
@@ -23,6 +23,7 @@
             position: relative;
         }
 
+        /* Styles desktop inchangés */
         .desktop-nav {
             display: none;
             height: 100%;
@@ -43,23 +44,7 @@
             border-radius: 4px;
         }
 
-        .lang-toggle {
-            color: #50c9b7;
-            background: none;
-            border: none;
-            padding: 0.8rem 1rem;
-            cursor: pointer;
-            font-weight: bold;
-            transition: all 0.3s ease;
-        }
-
-        .lang-toggle:hover {
-            color: white;
-            background-color: #4c566b;
-            border-radius: 4px;
-        }
-
-        /* Styles Mobile */
+        /* Styles du menu mobile modifiés */
         .mobile-nav {
             display: flex;
             justify-content: flex-end;
@@ -84,26 +69,26 @@
             transform: scale(1.1);
         }
 
+        /* Styles du menu mobile modifiés pour l'animation */
         .menu-content {
             position: fixed;
-            top: 150px;
+            top: 150px; /* Hauteur du header + nav */
             left: 0;
             right: 0;
             background-color: #102338;
-            transform: translateY(-100%);
+            padding: 0;
+            max-height: 0;
+            overflow: hidden;
             opacity: 0;
-            visibility: hidden;
             transition: all 0.3s ease-in-out;
             z-index: 2000;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
         .menu-content.active {
-            transform: translateY(0);
+            max-height: 300px; /* Hauteur maximale du menu */
             opacity: 1;
-            visibility: visible;
-            display: block;
-            animation: slideIn 0.3s ease-out forwards;
+            padding: 10px 0;
         }
 
         .menu-content a {
@@ -119,31 +104,22 @@
             background-color: rgba(255, 255, 255, 0.1);
         }
 
-        .menu-content button {
-            width: 100%;
-            padding: 15px 20px;
+        .lang-toggle {
+            color: #50c9b7;
             background: none;
             border: none;
-            color: #50c9b7;
-            font-size: 1rem;
+            padding: 0.8rem 1rem;
             cursor: pointer;
+            font-weight: bold;
+            width: 100%;
             text-align: left;
             font-family: 'Poppins', sans-serif;
+            transition: background-color 0.3s ease;
         }
 
-        .menu-content button:hover {
+        .lang-toggle:hover {
             background-color: rgba(255, 255, 255, 0.1);
-        }
-
-        @keyframes slideIn {
-            from {
-                transform: translateY(-20px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
+            color: white;
         }
 
         @media (min-width: 1024px) {
@@ -163,17 +139,6 @@
                 gap: 1rem;
             }
         }
-
-        @media (max-width: 768px) {
-            .menu-content {
-                top: 150px;
-                display: none; /* Ajouté pour cacher initialement */
-            }
-
-            .menu-content.active {
-                display: block; /* Afficher quand actif */
-            }
-        }
     </style>
 </head>
 <body>
@@ -181,12 +146,12 @@
         <!-- Navigation desktop -->
         <div class="desktop-nav">
             <div>
-                <a href="/locales/fr/pages/home.html" target="content-frame">Page d'accueil</a>
+                <a href="../pages/home.html" target="content-frame">Page d'accueil</a>
             </div>
             <div>
-                <a href="/locales/fr/pages/temps-reel.html" target="content-frame">Temps réel</a>
-                <a href="/locales/fr/pages/articles.html" target="content-frame">Articles</a>
-                <a href="/locales/fr/pages/liens-utiles.html" target="content-frame">Liens utiles</a>
+                <a href="../pages/temps-reel.html" target="content-frame">Temps réel</a>
+                <a href="../pages/articles.html" target="content-frame">Articles</a>
+                <a href="../pages/liens-utiles.html" target="content-frame">Liens utiles</a>
                 <button class="lang-toggle">FR / EN</button>
             </div>
         </div>
@@ -195,92 +160,55 @@
         <div class="mobile-nav">
             <button class="menu-button" onclick="toggleMenu()">☰</button>
             <div class="menu-content" id="mobile-menu">
-                <a href="/locales/fr/pages/home.html" target="content-frame">Page d'accueil</a>
-                <a href="/locales/fr/pages/temps-reel.html" target="content-frame">Temps réel</a>
-                <a href="/locales/fr/pages/articles.html" target="content-frame">Articles</a>
-                <a href="/locales/fr/pages/liens-utiles.html" target="content-frame">Liens utiles</a>
+                <a href="../pages/home.html" target="content-frame">Page d'accueil</a>
+                <a href="../pages/temps-reel.html" target="content-frame">Temps réel</a>
+                <a href="../pages/articles.html" target="content-frame">Articles</a>
+                <a href="../pages/liens-utiles.html" target="content-frame">Liens utiles</a>
                 <button class="lang-toggle">FR / EN</button>
             </div>
         </div>
     </nav>
 
     <script>
-        // Fonction de débogage détaillée
-        function debugMenuState() {
-            const menu = document.getElementById('mobile-menu');
-            const menuButton = document.querySelector('.menu-button');
-            
-            if (menu && menuButton) {
-                console.group('État du menu mobile');
-                console.log('Menu trouvé:', menu);
-                console.log('Bouton trouvé:', menuButton);
-                console.log('Classes du menu:', menu.className);
-                console.log('Menu visible:', window.getComputedStyle(menu).display !== 'none');
-                console.log('Style complet:', window.getComputedStyle(menu));
-                console.groupEnd();
-            } else {
-                console.error('Éléments du menu non trouvés:', {
-                    menu: !!menu,
-                    button: !!menuButton
-                });
-            }
-        }
-
-        // Fonction de basculement du menu avec débogage
         function toggleMenu() {
-            console.group('Toggle Menu appelé');
-            console.time('toggleMenu');
-            
             const menu = document.getElementById('mobile-menu');
             if (menu) {
-                const wasActive = menu.classList.contains('active');
-                console.log('État avant toggle:', { wasActive });
-                
                 menu.classList.toggle('active');
                 
-                // Forcer un reflow
-                void menu.offsetHeight;
-                
-                const isNowActive = menu.classList.contains('active');
-                console.log('État après toggle:', { isNowActive });
-                
-                // Ajouter une vérification de style
-                console.log('Style après toggle:', {
-                    display: window.getComputedStyle(menu).display,
-                    visibility: window.getComputedStyle(menu).visibility,
+                // Log l'état pour le débogage
+                console.group('Toggle Menu');
+                console.log('Menu actif:', menu.classList.contains('active'));
+                console.log('Style calculé:', {
+                    maxHeight: window.getComputedStyle(menu).maxHeight,
                     opacity: window.getComputedStyle(menu).opacity,
-                    transform: window.getComputedStyle(menu).transform
+                    padding: window.getComputedStyle(menu).padding
                 });
-                
-                debugMenuState();
-            } else {
-                console.error('Menu non trouvé');
+                console.groupEnd();
             }
-            
-            console.timeEnd('toggleMenu');
-            console.groupEnd();
         }
 
-        // Initialisation
         document.addEventListener('DOMContentLoaded', () => {
-            console.log('DOMContentLoaded déclenché');
             const menu = document.getElementById('mobile-menu');
             const menuButton = document.querySelector('.menu-button');
 
-            if (menuButton && menu) {
-                debugMenuState();
-                
-                // Fermer le menu quand on clique sur un lien ou en dehors
+            if (menu && menuButton) {
+                // Fermer le menu lors du clic sur un lien
                 document.querySelectorAll('.menu-content a, .menu-content button').forEach(element => {
                     element.addEventListener('click', () => {
                         menu.classList.remove('active');
                     });
                 });
 
+                // Fermer le menu lors du clic en dehors
                 document.addEventListener('click', (event) => {
                     if (!menu.contains(event.target) && !menuButton.contains(event.target)) {
                         menu.classList.remove('active');
                     }
+                });
+
+                // Observer les transitions pour le débogage
+                menu.addEventListener('transitionend', (e) => {
+                    console.log('Transition terminée:', e.propertyName);
                 });
             }
         });
