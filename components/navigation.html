@@ -89,6 +89,8 @@
             right: 0;
             background-color: #102338;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            min-height: 200px; /*pour debug*/
+            padding: 1rem 0; /* pour debug*/
             max-height: calc(100vh - 150px); /* Aussi mise à jour via JavaScript */
             overflow-y: auto;
             z-index: 1000;
@@ -99,6 +101,9 @@
             transition: transform 0.3s ease-out;
             transform: scaleY(0);
             opacity: 0;
+        }
+        .menu-content * {
+            border: 1px solid rgba(255, 255, 255, 0.1); /* pour voir la structure interne */
         }
 
         .menu-content.active {
@@ -193,10 +198,24 @@
     <script>
         window.addEventListener('message', (event) => {
             if (event.data.type === 'CSS_VARS') {
+                console.log('Navigation received CSS vars:', event.data.data); // Debug
+
                 const menu = document.querySelector('.menu-content');
                 const totalTop = parseInt(event.data.data.headerHeight) + parseInt(event.data.data.navHeight);
+                
+                console.log('Parsed values:', {  // Debug
+                    headerHeight: parseInt(event.data.data.headerHeight),
+                    navHeight: parseInt(event.data.data.navHeight),
+                    totalTop
+                });
+
                 menu.style.top = `${totalTop}px`;
                 menu.style.maxHeight = `calc(100vh - ${totalTop}px)`;
+                
+                console.log('Applied styles:', {  // Debug
+                    top: menu.style.top,
+                    maxHeight: menu.style.maxHeight
+                });
             }
         });
         
@@ -218,14 +237,23 @@
                 });
                 console.log('Dimensions:', {
                     width: rect.width,
-                    height: rect.height
+                    height: rect.height,
+                    minHeight: styles.minHeight,
+                    maxHeight: styles.maxHeight
                 });
                 console.log('CSS Properties:', {
                     position: styles.position,
                     display: styles.display,
                     zIndex: styles.zIndex,
                     transform: styles.transform,
-                    overflow: styles.overflow
+                    overflow: styles.overflow,
+                    padding: styles.padding,
+                    margin: styles.margin
+                });
+                console.log('Computed values:', {
+                    offsetHeight: element.offsetHeight,
+                    clientHeight: element.clientHeight,
+                    scrollHeight: element.scrollHeight
                 });
                 console.log('Parent overflow:', window.getComputedStyle(element.parentElement).overflow);
             }

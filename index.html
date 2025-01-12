@@ -104,6 +104,11 @@
                 navHeight: computedStyle.getPropertyValue('--nav-height').trim()
             };
             navFrame.addEventListener('load', () => {
+                const cssVars = {
+                    headerHeight: computedStyle.getPropertyValue('--header-height').trim(),
+                    navHeight: computedStyle.getPropertyValue('--nav-height').trim()
+                };
+                console.log('Parent sending CSS vars:', cssVars); // Debug
                 navFrame.contentWindow.postMessage({ type: 'CSS_VARS', data: cssVars }, '*');
             });
         });
