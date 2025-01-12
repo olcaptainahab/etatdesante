@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
+        /* Styles de base (communs à mobile et desktop) */
         * {
             margin: 0;
             padding: 0;
@@ -17,18 +18,43 @@
 
         nav {
             background-color: #2c3b5c;
-            min-height: 60px;
-            padding: 10px;
+            height: 60px;
+            width: 100%;
         }
 
-        /* Desktop Nav (masqué sur mobile) */
+        /* Styles des liens (communs) */
+        nav a {
+            color: #50c9b7;
+            text-decoration: none;
+            padding: 0.8rem 1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        nav a:hover {
+            color: white;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        nav button {
+            font-family: 'Poppins', sans-serif;
+            cursor: pointer;
+        }
+
+        /* Styles Desktop */
         .desktop-nav {
-            display: none;
+            display: none; /* Par défaut caché, affiché via media query */
+            height: 100%;
+            padding: 0 2rem;
         }
 
-        /* Mobile Nav */
+        /* Styles Mobile */
         .mobile-nav {
-            text-align: right;
+            height: 100%;
+            padding: 0 1rem;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
         }
 
         .menu-button {
@@ -36,44 +62,51 @@
             border: none;
             color: white;
             font-size: 24px;
-            cursor: pointer;
-            padding: 10px;
+            padding: 0.5rem 1rem;
         }
 
-        /* Menu mobile */
         .menu-content {
             display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
             background-color: #102338;
-            margin-top: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
         }
 
         .menu-content.active {
             display: block;
         }
 
-        /* Liens et boutons dans le menu */
         .menu-content a,
         .menu-content button {
             display: block;
             width: 100%;
-            padding: 15px;
+            padding: 1rem;
             text-align: left;
             color: white;
             background: none;
             border: none;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            font-family: 'Poppins', sans-serif;
-            font-size: 16px;
-            cursor: pointer;
-            text-decoration: none;
+            font-size: 1rem;
         }
 
-        .menu-content a:hover,
-        .menu-content button:hover {
-            background-color: rgba(255, 255, 255, 0.1);
+        /* Animation du menu mobile */
+        .menu-content {
+            transform-origin: top;
+            transition: transform 0.3s ease-out;
+            transform: scaleY(0);
+            opacity: 0;
         }
 
-        /* Desktop styles */
+        .menu-content.active {
+            transform: scaleY(1);
+            opacity: 1;
+        }
+
+        /* Media Query pour Desktop */
         @media (min-width: 1024px) {
             .mobile-nav {
                 display: none;
@@ -85,24 +118,39 @@
                 align-items: center;
             }
 
-            .desktop-nav a {
-                color: #50c9b7;
-                text-decoration: none;
-                padding: 0.8rem 1rem;
-                font-weight: bold;
+            .desktop-nav > div {
+                display: flex;
+                align-items: center;
+                gap: 1rem;
             }
 
-            .desktop-nav a:hover {
-                color: white;
-                background-color: #4c566b;
+            .desktop-nav a {
+                height: 60px;
+                display: flex;
+                align-items: center;
                 border-radius: 4px;
+            }
+
+            .desktop-nav button {
+                background: none;
+                border: 1px solid #50c9b7;
+                color: #50c9b7;
+                padding: 0.5rem 1rem;
+                border-radius: 4px;
+                font-size: 0.9rem;
+            }
+
+            .desktop-nav button:hover {
+                background-color: rgba(255, 255, 255, 0.1);
+                color: white;
+                border-color: white;
             }
         }
     </style>
 </head>
 <body>
     <nav>
-        <!-- Desktop Navigation -->
+        <!-- Navigation Desktop -->
         <div class="desktop-nav">
             <div>
                 <a href="/locales/fr/pages/home.html" target="content-frame">Page d'accueil</a>
@@ -115,43 +163,45 @@
             </div>
         </div>
 
-        <!-- Mobile Navigation -->
+        <!-- Navigation Mobile -->
         <div class="mobile-nav">
-            <button class="menu-button" onclick="toggleMenu()">☰</button>
-            <div id="mobile-menu" class="menu-content">
-                <a href="/locales/fr/pages/home.html" target="content-frame">Page d'accueil</a>
-                <a href="/locales/fr/pages/temps-reel.html" target="content-frame">Temps réel</a>
-                <a href="/locales/fr/pages/articles.html" target="content-frame">Articles</a>
-                <a href="/locales/fr/pages/liens-utiles.html" target="content-frame">Liens utiles</a>
-                <button>FR / EN</button>
+            <button class="menu-button" aria-label="Menu" aria-expanded="false" aria-controls="mobile-menu">☰</button>
+            <div id="mobile-menu" class="menu-content" role="menu">
+                <a href="/locales/fr/pages/home.html" target="content-frame" role="menuitem">Page d'accueil</a>
+                <a href="/locales/fr/pages/temps-reel.html" target="content-frame" role="menuitem">Temps réel</a>
+                <a href="/locales/fr/pages/articles.html" target="content-frame" role="menuitem">Articles</a>
+                <a href="/locales/fr/pages/liens-utiles.html" target="content-frame" role="menuitem">Liens utiles</a>
+                <button class="lang-toggle" role="menuitem">FR / EN</button>
             </div>
         </div>
     </nav>
 
     <script>
-        function toggleMenu() {
-            const menu = document.getElementById('mobile-menu');
-            menu.classList.toggle('active');
-        }
-
         document.addEventListener('DOMContentLoaded', () => {
-            const menu = document.getElementById('mobile-menu');
             const menuButton = document.querySelector('.menu-button');
+            const menu = document.getElementById('mobile-menu');
 
-            // Fermer le menu quand on clique sur un lien
-            document.querySelectorAll('.menu-content a, .menu-content button').forEach(element => {
-                element.addEventListener('click', () => {
-                    menu.classList.remove('active');
-                });
+            menuButton.addEventListener('click', () => {
+                const isExpanded = menuButton.getAttribute('aria-expanded') === 'true';
+                menuButton.setAttribute('aria-expanded', !isExpanded);
+                menu.classList.toggle('active');
             });
 
-            // Fermer le menu quand on clique en dehors
+            // Fermer le menu quand on clique sur un lien ou en dehors
             document.addEventListener('click', (event) => {
-                if (menu && menuButton && 
-                    !menu.contains(event.target) && 
-                    !menuButton.contains(event.target)) {
+                const isClickInside = menu.contains(event.target) || menuButton.contains(event.target);
+                if (!isClickInside && menu.classList.contains('active')) {
                     menu.classList.remove('active');
+                    menuButton.setAttribute('aria-expanded', 'false');
                 }
+            });
+
+            // Fermer le menu après avoir cliqué sur un lien
+            menu.querySelectorAll('a, button').forEach(element => {
+                element.addEventListener('click', () => {
+                    menu.classList.remove('active');
+                    menuButton.setAttribute('aria-expanded', 'false');
+                });
             });
         });
     </script>
