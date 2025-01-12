@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
+        /* [Les styles CSS restent identiques à la version précédente] */
         * {
             margin: 0;
             padding: 0;
@@ -166,6 +167,11 @@
         @media (max-width: 768px) {
             .menu-content {
                 top: 150px;
+                display: none; /* Ajouté pour cacher initialement */
+            }
+
+            .menu-content.active {
+                display: block; /* Afficher quand actif */
             }
         }
     </style>
@@ -175,12 +181,12 @@
         <!-- Navigation desktop -->
         <div class="desktop-nav">
             <div>
-                <a href="/locales/fr/pages/home.html" target="content-frame">Page d'accueil</a>
+                <a href="../pages/home.html" target="content-frame">Page d'accueil</a>
             </div>
             <div>
-                <a href="/locales/fr/pages/temps-reel.html" target="content-frame">Temps réel</a>
-                <a href="/locales/fr/pages/articles.html" target="content-frame">Articles</a>
-                <a href="/locales/fr/pages/liens-utiles.html" target="content-frame">Liens utiles</a>
+                <a href="../pages/temps-reel.html" target="content-frame">Temps réel</a>
+                <a href="../pages/articles.html" target="content-frame">Articles</a>
+                <a href="../pages/liens-utiles.html" target="content-frame">Liens utiles</a>
                 <button class="lang-toggle">FR / EN</button>
             </div>
         </div>
@@ -189,10 +195,10 @@
         <div class="mobile-nav">
             <button class="menu-button" onclick="toggleMenu()">☰</button>
             <div class="menu-content" id="mobile-menu">
-                <a href="/locales/fr/pages/home.html" target="content-frame">Page d'accueil</a>
-                <a href="/locales/fr/pages/temps-reel.html" target="content-frame">Temps réel</a>
-                <a href="/locales/fr/pages/articles.html" target="content-frame">Articles</a>
-                <a href="/locales/fr/pages/liens-utiles.html" target="content-frame">Liens utiles</a>
+                <a href="../pages/home.html" target="content-frame">Page d'accueil</a>
+                <a href="../pages/temps-reel.html" target="content-frame">Temps réel</a>
+                <a href="../pages/articles.html" target="content-frame">Articles</a>
+                <a href="../pages/liens-utiles.html" target="content-frame">Liens utiles</a>
                 <button class="lang-toggle">FR / EN</button>
             </div>
         </div>
@@ -210,11 +216,7 @@
                 console.log('Bouton trouvé:', menuButton);
                 console.log('Classes du menu:', menu.className);
                 console.log('Menu visible:', window.getComputedStyle(menu).display !== 'none');
-                console.log('Position du menu:', {
-                    top: window.getComputedStyle(menu).top,
-                    left: window.getComputedStyle(menu).left,
-                    zIndex: window.getComputedStyle(menu).zIndex
-                });
+                console.log('Style complet:', window.getComputedStyle(menu));
                 console.groupEnd();
             } else {
                 console.error('Éléments du menu non trouvés:', {
@@ -236,11 +238,19 @@
                 
                 menu.classList.toggle('active');
                 
+                // Forcer un reflow
+                void menu.offsetHeight;
+                
                 const isNowActive = menu.classList.contains('active');
                 console.log('État après toggle:', { isNowActive });
                 
-                // Forcer un reflow pour s'assurer que les styles sont appliqués
-                void menu.offsetHeight;
+                // Ajouter une vérification de style
+                console.log('Style après toggle:', {
+                    display: window.getComputedStyle(menu).display,
+                    visibility: window.getComputedStyle(menu).visibility,
+                    opacity: window.getComputedStyle(menu).opacity,
+                    transform: window.getComputedStyle(menu).transform
+                });
                 
                 debugMenuState();
             } else {
@@ -251,37 +261,15 @@
             console.groupEnd();
         }
 
-        // Initialisation et écouteurs d'événements
+        // Initialisation
         document.addEventListener('DOMContentLoaded', () => {
             console.log('DOMContentLoaded déclenché');
             const menu = document.getElementById('mobile-menu');
             const menuButton = document.querySelector('.menu-button');
 
             if (menuButton && menu) {
-                // Débogage initial
                 debugMenuState();
                 
-                // Observer les changements de style
-                const observer = new MutationObserver((mutations) => {
-                    mutations.forEach((mutation) => {
-                        if (mutation.attributeName === 'style' || mutation.attributeName === 'class') {
-                            console.group('Mutation détectée');
-                            console.log('Type de mutation:', mutation.attributeName);
-                            console.log('Nouvel état:', {
-                                className: menu.className,
-                                display: window.getComputedStyle(menu).display,
-                                visibility: window.getComputedStyle(menu).visibility
-                            });
-                            console.groupEnd();
-                        }
-                    });
-                });
-
-                observer.observe(menu, { 
-                    attributes: true,
-                    attributeFilter: ['style', 'class']
-                });
-
                 // Fermer le menu quand on clique sur un lien ou en dehors
                 document.querySelectorAll('.menu-content a, .menu-content button').forEach(element => {
                     element.addEventListener('click', () => {
