@@ -76,6 +76,17 @@ const MobileNavigation = () => {
                     Liens utiles
                   </a>
                 </li>
+                <li>
+                  <button
+                    onClick={() => {
+                      toggleLanguage();
+                      toggleMenu();
+                    }}
+                    className="block w-full p-2 text-left text-white hover:bg-blue-600 rounded-md"
+                  >
+                    FR / EN
+                  </button>
+                </li>
               </ul>
             </nav>
           </div>

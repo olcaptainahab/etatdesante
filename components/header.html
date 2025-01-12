@@ -15,8 +15,8 @@
         }
 
         .header-container {
-            display: grid;
-            grid-template-columns: 1fr auto 1fr;
+            display: flex;
+            justify-content: center;
             align-items: center;
             height: 100%;
             padding: 0 2rem;
@@ -24,7 +24,6 @@
         }
 
         .title-container {
-            grid-column: 2;
             text-align: center;
         }
 
@@ -45,26 +44,6 @@
             letter-spacing: 2px;
         }
 
-        .language-toggle {
-            grid-column: 3;
-            justify-self: end;
-            background: none;
-            border: 1px solid white;
-            color: white;
-            padding: 0.3rem 0.8rem;
-            border-radius: 4px;
-            cursor: pointer;
-            font-family: inherit;
-            font-size: 0.9rem;
-            transition: all 0.3s ease;
-        }
-
-        .language-toggle:hover {
-            background-color: var(--hover-color);
-            border-color: var(--hover-color);
-        }
-
-        /* Appliquer les couleurs de thème */
         [data-theme="dark"] {
             --nav-bg: #102338;
             --hover-color: #00a8ff;
@@ -93,7 +72,6 @@
                 height: 90px;
             }
         }
-
     </style>
 </head>
 <body>
@@ -102,23 +80,8 @@
             <h1 class="site-title">ÉTAT DE SANTÉ</h1>
             <div class="site-subtitle">exploration du système de santé québécois</div>
         </div>
-        <button class="language-toggle" onclick="toggleLanguage()">FR</button>
     </div>
     <script>
-        function toggleLanguage() {
-            const button = document.querySelector('.language-toggle');
-            const currentLang = button.textContent;
-            
-            if (currentLang === 'FR') {
-                button.textContent = 'EN';
-                // TODO: Implémenter le changement de langue
-                alert('La version anglaise n\'est pas encore disponible');
-                button.textContent = 'FR';
-            } else {
-                button.textContent = 'FR';
-            }
-        }
-
         // Charger le thème
         document.addEventListener('DOMContentLoaded', () => {
             const storedTheme = localStorage.getItem('theme') || 'dark';
