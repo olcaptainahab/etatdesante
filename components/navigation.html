@@ -15,8 +15,9 @@
 
         nav {
             padding: 0 1rem;
-            background-color: #102338;
+            background-color: #2c3b5c;
             height: 60px;
+            position: relative; /* Ajouté */
         }
 
         .desktop-nav {
@@ -40,16 +41,18 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            z-index: 1001; /* Augmenté */
         }
 
         .menu-content {
-            position: absolute;
-            top: 60px;
+            position: fixed; /* Changé de absolute à fixed */
+            top: 150px; /* Ajusté pour tenir compte du header */
             left: 0;
             right: 0;
             background-color: #102338;
             display: none;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 1000; /* Ajouté */
         }
 
         .menu-content.active {
@@ -122,6 +125,12 @@
                 color: white;
                 background-color: #4c566b;
                 border-radius: 4px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .menu-content {
+                top: 150px; /* Ajusté pour les mobiles */
             }
         }
     </style>
