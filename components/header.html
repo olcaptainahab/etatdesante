@@ -23,13 +23,26 @@
             background-color: var(--nav-bg);
         }
 
-        .site-title {
+        .title-container {
             grid-column: 2;
+            text-align: center;
+        }
+
+        .site-title {
             color: white;
             font-weight: 500;
-            text-align: center;
             font-size: 4rem;
-            padding: 1rem 0;
+            padding: 0.5rem 0 0 0;
+            line-height: 1;
+        }
+
+        .site-subtitle {
+            color: white;
+            font-weight: 300;
+            font-size: 1.5rem;
+            opacity: 0.8;
+            text-transform: lowercase;
+            letter-spacing: 2px;
         }
 
         .language-toggle {
@@ -53,7 +66,7 @@
 
         /* Appliquer les couleurs de thème */
         [data-theme="dark"] {
-            --nav-bg: #1a1a1a;
+            --nav-bg: #102338;
             --hover-color: #00a8ff;
         }
 
@@ -65,7 +78,10 @@
 </head>
 <body>
     <div class="header-container">
-        <h1 class="site-title">ÉTAT DE SANTÉ</h1>
+        <div class="title-container">
+            <h1 class="site-title">ÉTAT DE SANTÉ</h1>
+            <div class="site-subtitle">exploration du système de santé québécois</div>
+        </div>
         <button class="language-toggle" onclick="toggleLanguage()">FR</button>
     </div>
     <script>

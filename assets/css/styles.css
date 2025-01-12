@@ -6,8 +6,8 @@
     --bg-color: #ffffff;
     --text-color: #000000;
     --link-color: #007bff;
-    --hover-color: #00a8ff;
-    --nav-bg: #333;
+    --hover-color: #4c566b;
+    --nav-bg: #2c3b5c;
 }
 
 /* Reset et styles de base */
@@ -71,7 +71,7 @@ nav ul {
     margin-left: auto;
 }
 
-/* Liens et effets de survol */
+/* Menu de navigation et effets de survol */
 nav ul li {
     height: 100%;
     display: flex;
@@ -79,11 +79,13 @@ nav ul li {
 }
 
 nav a, #theme-toggle {
-    color: white;
+    color: #50c9b7;
     text-decoration: none;
     padding: 0.8rem 1rem;
     border-radius: 4px;
     transition: all 0.3s ease;
+    font-size: 1.2rem;
+    font-weight: bold;
 }
 
 nav a:hover, #theme-toggle:hover {
@@ -106,8 +108,8 @@ nav a:hover, #theme-toggle:hover {
 
 /* Thèmes */
 [data-theme="dark"] {
-    --bg-color: #1a1a1a;
-    --text-color: #ffffff;
+    --bg-color: #102338;
+    --text-color: rgb(222, 247, 253);
 }
 
 [data-theme="light"] {
