@@ -64,6 +64,21 @@
             box-sizing: border-box;
             background-color: var(--bg-color);
         }
+
+        @media (max-width: 768px) {
+            :root {
+                --header-height: 90px;  /* Réduire la hauteur du header */
+            }
+
+            #nav-container {
+                height: 50px;  /* Réduire la hauteur de la nav */
+            }
+
+            #content-frame {
+                margin-top: calc(var(--header-height) + 50px);
+                height: calc(100vh - (var(--header-height) + 50px));
+            }
+        }
     </style>
 </head>
 <body>

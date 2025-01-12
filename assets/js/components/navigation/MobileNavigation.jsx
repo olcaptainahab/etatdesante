@@ -24,7 +24,7 @@ const MobileNavigation = () => {
 
       {isOpen && (
         <div className="fixed inset-0 z-50 bg-black bg-opacity-50">
-          <div className="fixed inset-y-0 right-0 w-64 bg-[#102338] shadow-xl">
+          <div className="fixed inset-y-0 right-0 w-64 bg-[#102338] shadow-xl overflow-y-auto pt-16">
             <div className="flex justify-end p-4">
               <button
                 onClick={toggleMenu}
