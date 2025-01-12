@@ -6,22 +6,28 @@
 </head>
 <body>
     <header>
-        <nav class="hidden lg:flex">
+        <nav class="hidden lg:flex items-center w-full px-4">
             <ul class="left-links">
                 <li><a href="/locales/fr/pages/home.html" target="content-frame">Page d'accueil</a></li>
             </ul>
-            <ul class="right-links">
+            <ul class="right-links flex items-center gap-4">
                 <li><a href="/locales/fr/pages/temps-reel.html" target="content-frame">Temps réel</a></li>
                 <li><a href="/locales/fr/pages/articles.html" target="content-frame">Articles</a></li>
                 <li><a href="/locales/fr/pages/liens-utiles.html" target="content-frame">Liens utiles</a></li>
+                <li>
+                    <button id="lang-toggle" class="text-[#50c9b7] hover:bg-[#4c566b] hover:text-white px-4 py-2 rounded transition-colors duration-200 font-bold">
+                        FR / EN
+                    </button>
+                </li>
             </ul>
         </nav>
-        <div id="mobile-nav"></div>
+        <div id="mobile-nav" class="lg:hidden"></div>
     </header>
+
     <script src="/assets/js/script.js"></script>
     <script type="module">
         import { createRoot } from 'react-dom/client';
-        import MobileNavigation from '/assets/js/components/navigation/MobileNavigation.jsx';  // Chemin complet avec extension
+        import MobileNavigation from '/assets/js/components/navigation/MobileNavigation.jsx';
         
         const container = document.getElementById('mobile-nav');
         const root = createRoot(container);
