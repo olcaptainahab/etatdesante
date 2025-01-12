@@ -68,19 +68,28 @@
         }
 
         .menu-content {
+            /* Positionnement et apparence de base */
             display: none;
-            position: absolute;
-            top: 100%;
+            position: fixed;  /* Changé de absolute à fixed pour échapper aux contraintes de l'iframe */
+            top: 60px;       /* Hauteur de la barre de navigation */
             left: 0;
             right: 0;
             background-color: #102338;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             z-index: 1000;
-            border:2px solid red;
+            border: 2px solid red;
+
+            /* Propriétés d'animation */
+            transform-origin: top;
+            transition: transform 0.3s ease-out;
+            transform: scaleY(0);
+            opacity: 0;
         }
 
         .menu-content.active {
             display: block;
+            transform: scaleY(1);
+            opacity: 1;
         }
 
         .menu-content a,
@@ -94,19 +103,6 @@
             border: none;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             font-size: 1rem;
-        }
-
-        /* Animation du menu mobile */
-        .menu-content {
-            transform-origin: top;
-            transition: transform 0.3s ease-out;
-            transform: scaleY(0);
-            opacity: 0;
-        }
-
-        .menu-content.active {
-            transform: scaleY(1);
-            opacity: 1;
         }
 
         /* Media Query pour Desktop */
