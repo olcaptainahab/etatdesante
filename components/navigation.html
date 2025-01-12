@@ -45,18 +45,20 @@
         }
 
         .menu-content {
-            position: fixed; /* Changé de absolute à fixed */
-            top: 150px; /* Ajusté pour tenir compte du header */
+            position: fixed;
+            top: calc(var(--header-height) + var(--nav-height));
             left: 0;
             right: 0;
             background-color: #102338;
             display: none;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            z-index: 1000; /* Ajouté */
+            z-index: 2000; /* Augmenté pour être sûr qu'il soit au-dessus des autres éléments */
         }
 
         .menu-content.active {
             display: block;
+            max-height: calc(100vh - var(--header-height) - var(--nav-height));
+            overflow-y: auto;
         }
 
         .menu-content a {
@@ -167,8 +169,21 @@
         function toggleMenu() {
             const menu = document.getElementById('mobile-menu');
             menu.classList.toggle('active');
+            
+            // Ajouter cette ligne pour déboguer
+            console.log('Menu toggled:', menu.classList.contains('active'));
         }
-
+    
+        // Fermer le menu quand on clique sur un lien ou en dehors du menu
+        document.addEventListener('click', function(event) {
+            const menu = document.getElementById('mobile-menu');
+            const menuButton = document.querySelector('.menu-button');
+            
+            if (!menu.contains(event.target) && !menuButton.contains(event.target)) {
+                menu.classList.remove('active');
+            }
+        });
+    
         // Fermer le menu quand on clique sur un lien
         document.querySelectorAll('.menu-content a, .menu-content button').forEach(element => {
             element.addEventListener('click', function() {
