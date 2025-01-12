@@ -2,36 +2,170 @@
 <html lang="fr">
 <head>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/assets/css/styles.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        nav {
+            padding: 0 1rem;
+            background-color: #102338;
+            height: 60px;
+        }
+
+        .desktop-nav {
+            display: none;
+        }
+
+        .mobile-nav {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            height: 100%;
+        }
+
+        .menu-button {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .menu-content {
+            position: absolute;
+            top: 60px;
+            left: 0;
+            right: 0;
+            background-color: #102338;
+            display: none;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .menu-content.active {
+            display: block;
+        }
+
+        .menu-content a {
+            color: white;
+            text-decoration: none;
+            padding: 15px 20px;
+            display: block;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .menu-content a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .menu-content button {
+            width: 100%;
+            text-align: left;
+            background: none;
+            border: none;
+            color: white;
+            padding: 15px 20px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: inherit;
+        }
+
+        .menu-content button:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        @media (min-width: 1024px) {
+            .mobile-nav {
+                display: none;
+            }
+
+            .desktop-nav {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                height: 100%;
+            }
+
+            .desktop-nav a {
+                color: #50c9b7;
+                text-decoration: none;
+                padding: 0.8rem 1rem;
+                font-weight: bold;
+            }
+
+            .desktop-nav a:hover {
+                color: white;
+                background-color: #4c566b;
+                border-radius: 4px;
+            }
+
+            .lang-toggle {
+                color: #50c9b7;
+                background: none;
+                border: none;
+                padding: 0.8rem 1rem;
+                cursor: pointer;
+                font-weight: bold;
+            }
+
+            .lang-toggle:hover {
+                color: white;
+                background-color: #4c566b;
+                border-radius: 4px;
+            }
+        }
+    </style>
 </head>
 <body>
-    <header>
-        <nav class="hidden lg:flex items-center w-full px-4">
-            <ul class="left-links">
-                <li><a href="/locales/fr/pages/home.html" target="content-frame">Page d'accueil</a></li>
-            </ul>
-            <ul class="right-links flex items-center gap-4">
-                <li><a href="/locales/fr/pages/temps-reel.html" target="content-frame">Temps réel</a></li>
-                <li><a href="/locales/fr/pages/articles.html" target="content-frame">Articles</a></li>
-                <li><a href="/locales/fr/pages/liens-utiles.html" target="content-frame">Liens utiles</a></li>
-                <li>
-                    <button id="lang-toggle" class="text-[#50c9b7] hover:bg-[#4c566b] hover:text-white px-4 py-2 rounded transition-colors duration-200 font-bold">
-                        FR / EN
-                    </button>
-                </li>
-            </ul>
-        </nav>
-        <div id="mobile-nav" class="lg:hidden"></div>
-    </header>
+    <nav>
+        <!-- Navigation desktop -->
+        <div class="desktop-nav">
+            <div>
+                <a href="/locales/fr/pages/home.html" target="content-frame">Page d'accueil</a>
+            </div>
+            <div>
+                <a href="/locales/fr/pages/temps-reel.html" target="content-frame">Temps réel</a>
+                <a href="/locales/fr/pages/articles.html" target="content-frame">Articles</a>
+                <a href="/locales/fr/pages/liens-utiles.html" target="content-frame">Liens utiles</a>
+                <button class="lang-toggle">FR / EN</button>
+            </div>
+        </div>
 
-    <script src="/assets/js/script.js"></script>
-    <script type="module">
-        import { createRoot } from 'react-dom/client';
-        import MobileNavigation from '/assets/js/components/navigation/MobileNavigation.jsx';
-        
-        const container = document.getElementById('mobile-nav');
-        const root = createRoot(container);
-        root.render(<MobileNavigation />);
+        <!-- Navigation mobile -->
+        <div class="mobile-nav">
+            <button class="menu-button" onclick="toggleMenu()">☰</button>
+            <div class="menu-content" id="mobile-menu">
+                <a href="/locales/fr/pages/home.html" target="content-frame">Page d'accueil</a>
+                <a href="/locales/fr/pages/temps-reel.html" target="content-frame">Temps réel</a>
+                <a href="/locales/fr/pages/articles.html" target="content-frame">Articles</a>
+                <a href="/locales/fr/pages/liens-utiles.html" target="content-frame">Liens utiles</a>
+                <button>FR / EN</button>
+            </div>
+        </div>
+    </nav>
+
+    <script>
+        function toggleMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('active');
+        }
+
+        // Fermer le menu quand on clique sur un lien
+        document.querySelectorAll('.menu-content a, .menu-content button').forEach(element => {
+            element.addEventListener('click', function() {
+                document.getElementById('mobile-menu').classList.remove('active');
+            });
+        });
     </script>
 </body>
 </html>
