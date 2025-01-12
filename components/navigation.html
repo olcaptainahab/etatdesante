@@ -18,14 +18,15 @@
         nav {
             background-color: #2c3b5c;
             min-height: 60px;
-            position: relative;
             padding: 10px;
         }
 
+        /* Desktop Nav (masqué sur mobile) */
         .desktop-nav {
             display: none;
         }
 
+        /* Mobile Nav */
         .mobile-nav {
             text-align: right;
         }
@@ -39,19 +40,18 @@
             padding: 10px;
         }
 
+        /* Menu mobile */
         .menu-content {
+            display: none;
             background-color: #102338;
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease-out;
-            border: 2px solid yellow; /* Pour le débogage */
+            margin-top: 10px;
         }
 
         .menu-content.active {
-            max-height: 500px;
-            border-color: green; /* Pour le débogage */
+            display: block;
         }
 
+        /* Liens et boutons dans le menu */
         .menu-content a,
         .menu-content button {
             display: block;
@@ -59,7 +59,7 @@
             padding: 15px;
             text-align: left;
             color: white;
-            background: #102338;
+            background: none;
             border: none;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             font-family: 'Poppins', sans-serif;
@@ -73,20 +73,7 @@
             background-color: rgba(255, 255, 255, 0.1);
         }
 
-        .debug-info {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: rgba(0, 0, 0, 0.8);
-            color: white;
-            padding: 10px;
-            font-family: monospace;
-            z-index: 9999;
-            max-height: 200px;
-            overflow: auto;
-        }
-
+        /* Desktop styles */
         @media (min-width: 1024px) {
             .mobile-nav {
                 display: none;
@@ -114,8 +101,6 @@
     </style>
 </head>
 <body>
-    <div id="debug-info" class="debug-info"></div>
-
     <nav>
         <!-- Desktop Navigation -->
         <div class="desktop-nav">
@@ -144,76 +129,29 @@
     </nav>
 
     <script>
-        function updateDebugInfo(menu) {
-            const debugEl = document.getElementById('debug-info');
-            const styles = window.getComputedStyle(menu);
-            const rect = menu.getBoundingClientRect();
-            
-            const debugInfo = {
-                dimensions: {
-                    width: rect.width + 'px',
-                    height: rect.height + 'px',
-                    top: rect.top + 'px',
-                    left: rect.left + 'px'
-                },
-                styles: {
-                    display: styles.display,
-                    maxHeight: styles.maxHeight,
-                    overflow: styles.overflow,
-                    background: styles.backgroundColor,
-                    position: styles.position,
-                    visibility: styles.visibility,
-                    opacity: styles.opacity,
-                    zIndex: styles.zIndex
-                },
-                classes: menu.className,
-                children: menu.children.length,
-                contentHeight: menu.scrollHeight + 'px'
-            };
-
-            debugEl.innerHTML = `<pre>${JSON.stringify(debugInfo, null, 2)}</pre>`;
-            console.log('Menu Debug:', debugInfo);
-        }
-
         function toggleMenu() {
             const menu = document.getElementById('mobile-menu');
-            const isActive = menu.classList.contains('active');
-            
-            console.log('Toggle Menu - Before:', {
-                isActive: isActive,
-                scrollHeight: menu.scrollHeight,
-                className: menu.className,
-                style: window.getComputedStyle(menu)
-            });
-            
             menu.classList.toggle('active');
-            
-            console.log('Toggle Menu - After:', {
-                isActive: !isActive,
-                scrollHeight: menu.scrollHeight,
-                className: menu.className,
-                style: window.getComputedStyle(menu)
-            });
-            
-            updateDebugInfo(menu);
         }
 
         document.addEventListener('DOMContentLoaded', () => {
             const menu = document.getElementById('mobile-menu');
-            console.log('Initial menu state:', {
-                element: menu,
-                style: window.getComputedStyle(menu),
-                scrollHeight: menu.scrollHeight
-            });
-            updateDebugInfo(menu);
+            const menuButton = document.querySelector('.menu-button');
 
-            menu.addEventListener('transitionend', (e) => {
-                console.log('Transition ended:', {
-                    property: e.propertyName,
-                    elapsedTime: e.elapsedTime,
-                    currentHeight: menu.scrollHeight
+            // Fermer le menu quand on clique sur un lien
+            document.querySelectorAll('.menu-content a, .menu-content button').forEach(element => {
+                element.addEventListener('click', () => {
+                    menu.classList.remove('active');
                 });
-                updateDebugInfo(menu);
+            });
+
+            // Fermer le menu quand on clique en dehors
+            document.addEventListener('click', (event) => {
+                if (menu && menuButton && 
+                    !menu.contains(event.target) && 
+                    !menuButton.contains(event.target)) {
+                    menu.classList.remove('active');
+                }
             });
         });
     </script>
