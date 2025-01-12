@@ -17,17 +17,18 @@
 
         nav {
             background-color: #2c3b5c;
+            min-height: 60px;
+            position: relative;
             padding: 10px;
         }
 
-        /* Desktop Nav */
+        /* Styles Desktop (masqués sur mobile) */
         .desktop-nav {
             display: none;
         }
 
-        /* Mobile Nav */
+        /* Styles Mobile */
         .mobile-nav {
-            position: relative;
             text-align: right;
         }
 
@@ -36,19 +37,22 @@
             border: none;
             color: white;
             font-size: 24px;
-            padding: 10px;
             cursor: pointer;
+            padding: 10px;
         }
 
+        /* Menu content avec indicateurs visuels pour le débogage */
         .menu-content {
-            display: none;
-            width: 100%;
-            background-color: #102338;
-            margin-top: 10px;
+            background-color: red; /* Temporaire pour déboguer */
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            border: 2px solid yellow; /* Temporaire pour déboguer */
         }
 
         .menu-content.active {
-            display: block;
+            max-height: 500px; /* Une valeur suffisamment grande */
+            border-color: green; /* Temporaire pour déboguer */
         }
 
         .menu-content a,
@@ -57,19 +61,28 @@
             width: 100%;
             padding: 15px;
             text-align: left;
+            color: white;
+            background: #102338;
             border: none;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            background: none;
-            color: white;
-            font-size: 16px;
             font-family: 'Poppins', sans-serif;
+            font-size: 16px;
             cursor: pointer;
             text-decoration: none;
         }
 
-        .menu-content a:hover,
-        .menu-content button:hover {
-            background-color: rgba(255, 255, 255, 0.1);
+        .debug-info {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 10px;
+            font-family: monospace;
+            z-index: 9999;
+            max-height: 200px;
+            overflow: auto;
         }
 
         @media (min-width: 1024px) {
@@ -82,23 +95,13 @@
                 justify-content: space-between;
                 align-items: center;
             }
-
-            .desktop-nav a {
-                color: #50c9b7;
-                text-decoration: none;
-                padding: 10px;
-                margin: 0 5px;
-            }
-
-            .desktop-nav a:hover {
-                color: white;
-                background-color: rgba(255, 255, 255, 0.1);
-                border-radius: 4px;
-            }
         }
     </style>
 </head>
 <body>
+    <!-- Information de débogage en temps réel -->
+    <div id="debug-info" class="debug-info"></div>
+
     <nav>
         <!-- Desktop Navigation -->
         <div class="desktop-nav">
@@ -127,43 +130,92 @@
     </nav>
 
     <script>
-        function toggleMenu() {
-            const menu = document.getElementById('mobile-menu');
-            menu.classList.toggle('active');
-            
-            // Debug logs
+        // Fonction pour mettre à jour les informations de débogage
+        function updateDebugInfo(menu) {
+            const debugEl = document.getElementById('debug-info');
             const styles = window.getComputedStyle(menu);
-            const menuRect = menu.getBoundingClientRect();
+            const rect = menu.getBoundingClientRect();
             
-            console.log('Menu State:', {
-                isActive: menu.classList.contains('active'),
-                display: styles.display,
+            const debugInfo = {
                 dimensions: {
-                    width: menuRect.width,
-                    height: menuRect.height,
-                    top: menuRect.top,
-                    left: menuRect.left
+                    width: rect.width + 'px',
+                    height: rect.height + 'px',
+                    top: rect.top + 'px',
+                    left: rect.left + 'px'
                 },
                 styles: {
-                    backgroundColor: styles.backgroundColor,
+                    display: styles.display,
+                    maxHeight: styles.maxHeight,
+                    overflow: styles.overflow,
+                    background: styles.backgroundColor,
+                    position: styles.position,
                     visibility: styles.visibility,
-                    position: styles.position
-                }
+                    opacity: styles.opacity
+                },
+                classes: menu.className,
+                children: menu.children.length
+            };
+
+            debugEl.innerHTML = `<pre>${JSON.stringify(debugInfo, null, 2)}</pre>`;
+            console.log('Menu Debug:', debugInfo);
+        }
+
+        function toggleMenu() {
+            console.log('Toggle Menu Called');
+            const menu = document.getElementById('mobile-menu');
+            
+            // Log avant le changement
+            console.log('Before toggle:', {
+                className: menu.className,
+                style: window.getComputedStyle(menu)
+            });
+
+            // Toggle la classe
+            menu.classList.toggle('active');
+            
+            // Force un reflow
+            void menu.offsetHeight;
+
+            // Log après le changement
+            console.log('After toggle:', {
+                className: menu.className,
+                style: window.getComputedStyle(menu)
+            });
+
+            // Mise à jour des infos de débogage
+            updateDebugInfo(menu);
+
+            // Observer les changements pendant la transition
+            const observer = new MutationObserver((mutations) => {
+                mutations.forEach((mutation) => {
+                    console.log('Mutation:', {
+                        type: mutation.type,
+                        target: mutation.target,
+                        style: window.getComputedStyle(mutation.target)
+                    });
+                });
+            });
+
+            observer.observe(menu, {
+                attributes: true,
+                attributeFilter: ['style', 'class']
             });
         }
 
+        // Initialisation
         document.addEventListener('DOMContentLoaded', () => {
             const menu = document.getElementById('mobile-menu');
-            
-            // Log état initial du menu
-            const menuRect = menu.getBoundingClientRect();
-            console.log('Initial Menu State:', {
-                element: menu,
-                dimensions: {
-                    width: menuRect.width,
-                    height: menuRect.height
-                },
-                styles: window.getComputedStyle(menu)
+            console.log('Initial state:', menu);
+            updateDebugInfo(menu);
+
+            // Observer les transitions
+            menu.addEventListener('transitionend', (e) => {
+                console.log('Transition ended:', {
+                    property: e.propertyName,
+                    elapsedTime: e.elapsedTime,
+                    style: window.getComputedStyle(menu)
+                });
+                updateDebugInfo(menu);
             });
         });
     </script>
