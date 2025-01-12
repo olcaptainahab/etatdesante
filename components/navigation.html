@@ -5,6 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
+
+        :root {
+            --header-height: 120px;
+            --nav-height: 60px;
+        }
+
+        @media (max-width: 768px) {
+            :root {
+                --header-height: 90px;
+                --nav-height: 60px;
+            }
+        }
+
         /* Styles de base (communs à mobile et desktop) */
         * {
             margin: 0;
@@ -70,12 +83,14 @@
         .menu-content {
             /* Positionnement et apparence de base */
             display: none;
-            position: fixed;  /* Changé de absolute à fixed pour échapper aux contraintes de l'iframe */
-            top: 60px;       /* Hauteur de la barre de navigation */
+            position: fixed;
+            top: calc(var(--header-height) + 60px); /* On utilise la hauteur du header + nav */
             left: 0;
             right: 0;
             background-color: #102338;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            max-height: calc(100vh - var(--header-height) - 60px); /* Limite la hauteur */
+            overflow-y: auto; /* Permet le défilement si nécessaire */
             z-index: 1000;
             border: 2px solid red;
 
