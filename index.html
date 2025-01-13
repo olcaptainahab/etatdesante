@@ -8,7 +8,7 @@
         :root {
             --bg-color: #102338;
             --header-height: 120px;
-            --nav-height: 60px; /* Ajout d'une variable pour la hauteur de navigation */
+            --nav-height: 60px;
         }
 
         [data-theme="light"] {
@@ -21,12 +21,14 @@
             overflow-x: hidden;
             height: 100vh;
             background-color: var(--bg-color);
+            font-family: 'Poppins', sans-serif;
         }
 
         iframe {
             border: none;
         }
 
+        /* Conteneurs existants */
         #header-container {
             position: fixed;
             top: 0;
@@ -45,12 +47,7 @@
             z-index: 999;
         }
 
-        #header-frame {
-            width: 100%;
-            height: 100%;
-        }
-
-        #nav-frame {
+        #header-frame, #nav-frame {
             width: 100%;
             height: 100%;
         }
@@ -60,10 +57,113 @@
             z-index: 1;
             display: block;
             width: 100%;
-            margin-top: calc(var(--header-height) + var(--nav-height) + 2rem); /* Ajout de 2rem de padding */
+            margin-top: calc(var(--header-height) + var(--nav-height) + 2rem);
             height: calc(100vh - (var(--header-height) + var(--nav-height) + 2rem));
             box-sizing: border-box;
             background-color: var(--bg-color);
+        }
+
+        /* Nouveau menu mobile */
+        .mobile-nav {
+            display: none;
+            position: fixed;
+            top: var(--header-height);
+            left: 0;
+            right: 0;
+            height: var(--nav-height);
+            background-color: #2c3b5c;
+            z-index: 999;
+        }
+
+        .menu-button {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+        }
+
+        .mobile-menu {
+            position: fixed;
+            top: calc(var(--header-height) + var(--nav-height));
+            left: 0;
+            right: 0;
+            background-color: #102338;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            padding: 1rem 0;
+            
+            /* Animation initiale */
+            transform-origin: top;
+            transform: scaleY(0);
+            opacity: 0;
+            visibility: hidden;
+            
+            /* Propriétés de transition */
+            transition: transform 0.3s ease,
+                        opacity 0.2s ease,
+                        visibility 0s linear 0.3s;
+        }
+
+        .mobile-menu.active {
+            transform: scaleY(1);
+            opacity: 1;
+            visibility: visible;
+            transition: transform 0.3s ease,
+                        opacity 0.2s ease,
+                        visibility 0s;
+        }
+
+        .mobile-menu a {
+            display: block;
+            padding: 1rem;
+            color: #50c9b7;
+            text-decoration: none;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 1rem;
+        }
+
+        .mobile-menu button {
+            display: block;
+            width: 100%;
+            padding: 1rem;
+            text-align: left;
+            color: #50c9b7;
+            background: none;
+            border: none;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 1rem;
+            font-family: 'Poppins', sans-serif;
+            cursor: pointer;
+
+            /* animer les liens du menu : */
+            transform: translateY(-10px);
+            opacity: 0;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+
+        .mobile-menu.active a,
+        .mobile-menu.active button {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* Ajouter un délai progressif pour chaque élément */
+        .mobile-menu a:nth-child(1) { transition-delay: 0.1s; }
+        .mobile-menu a:nth-child(2) { transition-delay: 0.15s; }
+        .mobile-menu a:nth-child(3) { transition-delay: 0.2s; }
+        .mobile-menu a:nth-child(4) { transition-delay: 0.25s; }
+        .mobile-menu button { transition-delay: 0.3s; }
+
+        @media (max-width: 1023px) {
+            .mobile-nav {
+                display: block;
+            }
         }
 
         @media (max-width: 768px) {
@@ -73,7 +173,7 @@
             }
 
             #content-frame {
-                margin-top: calc(var(--header-height) + var(--nav-height) + 1.5rem); /* Ajustement pour mobile */
+                margin-top: calc(var(--header-height) + var(--nav-height) + 1.5rem);
                 height: calc(100vh - (var(--header-height) + var(--nav-height) + 1.5rem));
             }
         }
@@ -83,33 +183,54 @@
     <div id="header-container">
         <iframe id="header-frame" src="components/header.html"></iframe>
     </div>
+    
     <div id="nav-container">
         <iframe id="nav-frame" src="components/navigation.html"></iframe>
     </div>
-    <iframe id="content-frame" name="content-frame" src="locales/fr/pages/home.html"></iframe>
 
-    <script src="assets/js/theme-loader.js"></script>
-    <script src="assets/js/script.js"></script>
+    <!-- Nouveau menu mobile -->
+    <div class="mobile-nav">
+        <button class="menu-button" aria-label="Menu" aria-expanded="false" aria-controls="mobile-menu">☰</button>
+    </div>
+    <div id="mobile-menu" class="mobile-menu" role="menu">
+        <a href="/locales/fr/pages/home.html" target="content-frame" role="menuitem">Page d'accueil</a>
+        <a href="/locales/fr/pages/temps-reel.html" target="content-frame" role="menuitem">Temps réel</a>
+        <a href="/locales/fr/pages/articles.html" target="content-frame" role="menuitem">Articles</a>
+        <a href="/locales/fr/pages/liens-utiles.html" target="content-frame" role="menuitem">Liens utiles</a>
+        <button class="lang-toggle" role="menuitem">FR / EN</button>
+    </div>
+
+    <iframe id="content-frame" name="content-frame" src="locales/fr/pages/home.html"></iframe>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const storedTheme = localStorage.getItem('theme') || 'dark';
             document.documentElement.setAttribute('data-theme', storedTheme);
 
-            // Envoyer les variables CSS à l'iframe de navigation
-            const navFrame = document.getElementById('nav-frame');
-            const computedStyle = getComputedStyle(document.documentElement);
-            const cssVars = {
-                headerHeight: computedStyle.getPropertyValue('--header-height').trim(),
-                navHeight: computedStyle.getPropertyValue('--nav-height').trim()
-            };
-            navFrame.addEventListener('load', () => {
-                const cssVars = {
-                    headerHeight: computedStyle.getPropertyValue('--header-height').trim(),
-                    navHeight: computedStyle.getPropertyValue('--nav-height').trim()
-                };
-                console.log('Parent sending CSS vars:', cssVars); // Debug
-                navFrame.contentWindow.postMessage({ type: 'CSS_VARS', data: cssVars }, '*');
+            // Gestion du menu mobile
+            const menuButton = document.querySelector('.menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+
+            menuButton.addEventListener('click', () => {
+                const isExpanded = menuButton.getAttribute('aria-expanded') === 'true';
+                menuButton.setAttribute('aria-expanded', !isExpanded);
+                mobileMenu.classList.toggle('active');
+            });
+
+            // Fermer le menu au clic sur un lien
+            document.querySelectorAll('#mobile-menu a, #mobile-menu button').forEach(item => {
+                item.addEventListener('click', () => {
+                    mobileMenu.classList.remove('active');
+                    menuButton.setAttribute('aria-expanded', 'false');
+                });
+            });
+
+            // Fermer le menu au clic en dehors
+            document.addEventListener('click', (e) => {
+                if (!menuButton.contains(e.target) && !mobileMenu.contains(e.target)) {
+                    mobileMenu.classList.remove('active');
+                    menuButton.setAttribute('aria-expanded', 'false');
+                }
             });
         });
 
