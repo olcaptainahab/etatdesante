@@ -84,24 +84,26 @@
             /* Positionnement et apparence de base */
             display: none;
             position: fixed;
-            top: 150px; /* Valeur temporaire qui sera mise à jour via JavaScript */
+            top: 150px;
             left: 0;
             right: 0;
+            height: auto;  /* Ajouté */
             background-color: #102338;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            min-height: 200px; /*pour debug*/
-            padding: 1rem 0; /* pour debug*/
-            max-height: calc(100vh - 150px); /* Aussi mise à jour via JavaScript */
             overflow-y: auto;
             z-index: 1000;
             border: 2px solid red;
+            min-height: 200px;
+            padding: 1rem 0;
 
             /* Propriétés d'animation */
             transform-origin: top;
             transition: transform 0.3s ease-out;
             transform: scaleY(0);
             opacity: 0;
+            visibility: hidden;
         }
+
         .menu-content * {
             border: 1px solid rgba(255, 255, 255, 0.1); /* pour voir la structure interne */
         }
@@ -110,6 +112,7 @@
             display: block;
             transform: scaleY(1);
             opacity: 1;
+            visibility: visible;
         }
 
         .menu-content a,
@@ -198,21 +201,22 @@
     <script>
         window.addEventListener('message', (event) => {
             if (event.data.type === 'CSS_VARS') {
-                console.log('Navigation received CSS vars:', event.data.data); // Debug
+                console.log('Navigation received CSS vars:', event.data.data);
 
                 const menu = document.querySelector('.menu-content');
                 const totalTop = parseInt(event.data.data.headerHeight) + parseInt(event.data.data.navHeight);
                 
-                console.log('Parsed values:', {  // Debug
+                console.log('Parsed values:', {
                     headerHeight: parseInt(event.data.data.headerHeight),
                     navHeight: parseInt(event.data.data.navHeight),
                     totalTop
                 });
 
                 menu.style.top = `${totalTop}px`;
+                // Corrigé l'ordre du calcul
                 menu.style.maxHeight = `calc(100vh - ${totalTop}px)`;
                 
-                console.log('Applied styles:', {  // Debug
+                console.log('Applied styles:', {
                     top: menu.style.top,
                     maxHeight: menu.style.maxHeight
                 });
